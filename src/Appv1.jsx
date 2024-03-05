@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const tempMovieData = [
   {
@@ -48,29 +48,11 @@ const tempWatchedData = [
     userRating: 9,
   },
 ];
-const KEY = "393d69b";
+
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-  const [query, setQuery] = useState("inception");
-  const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    async function fetchMovies() {
-      setIsLoading(true);
-      const res = await fetch(
-        `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
-      )
-        .then((data) => data.json())
-        .then((data) => setMovies(data.Search));
-      const data = await res.json();
-      setMovies(data.Search);
-      setIsLoading(false);
-    }
-    fetchMovies();
-  }, []);
+  const [movies, setMovies] = useState(tempMovieData);
 
   return (
     <>
@@ -82,7 +64,7 @@ export default function App() {
         <ListBox movies={movies}>
           <MovieList movies={movies} />
         </ListBox>
-        <WathchedBox watched={watched} />
+        <WathchedBox />
       </Main>
     </>
   );
@@ -131,7 +113,9 @@ function Main({ children }) {
   return <main className="main">{children}</main>;
 }
 
-function WathchedBox({ watched }) {
+function WathchedBox() {
+  const [watched, setWatched] = useState(tempWatchedData);
+
   const [isOpen2, setIsOpen2] = useState(true);
 
   return (
